@@ -22,7 +22,7 @@ from launch_pal.include_utils import include_scoped_launch_py_description
 from launch_pal.arg_utils import read_launch_argument
 from tiago_dual_description.tiago_dual_launch_utils import get_tiago_dual_hw_suffix
 from launch_pal.param_utils import merge_param_files
-from launch_pal.arg_utils import LaunchArgumentsBase
+from launch_pal.arg_utils import LaunchArgumentsBase, CommonArgs
 from launch_pal.robot_arguments import TiagoDualArgs
 
 
@@ -36,10 +36,7 @@ class LaunchArguments(LaunchArgumentsBase):
     ft_sensor_right: DeclareLaunchArgument = TiagoDualArgs.ft_sensor_right
     ft_sensor_left: DeclareLaunchArgument = TiagoDualArgs.ft_sensor_left
 
-    use_sim_time:  DeclareLaunchArgument = DeclareLaunchArgument(
-        'use_sim_time',
-        default_value='False',
-        description='Use sim time.')
+    use_sim_time:  DeclareLaunchArgument = CommonArgs.use_sim_time
 
 
 def generate_launch_description():

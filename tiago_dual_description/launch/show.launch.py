@@ -19,7 +19,7 @@ from launch.substitutions import PathJoinSubstitution, LaunchConfiguration
 from launch_pal.include_utils import include_scoped_launch_py_description
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
-from launch_pal.arg_utils import LaunchArgumentsBase
+from launch_pal.arg_utils import LaunchArgumentsBase, CommonArgs
 from launch_pal.robot_arguments import TiagoDualArgs
 
 
@@ -38,15 +38,8 @@ class LaunchArguments(LaunchArgumentsBase):
     camera_model: DeclareLaunchArgument = TiagoDualArgs.camera_model
     laser_model: DeclareLaunchArgument = TiagoDualArgs.laser_model
     has_screen: DeclareLaunchArgument = TiagoDualArgs.has_screen
-
-    use_sim_time: DeclareLaunchArgument = DeclareLaunchArgument(
-        name='use_sim_time',
-        default_value='False',
-        description='Use simulation time')
-    namespace: DeclareLaunchArgument = DeclareLaunchArgument(
-        name='namespace',
-        default_value='',
-        description='Define namespace of the robot. ')
+    use_sim_time: DeclareLaunchArgument = CommonArgs.use_sim_time
+    namespace: DeclareLaunchArgument = CommonArgs.namespace
 
 
 def generate_launch_description():
@@ -85,13 +78,13 @@ def declare_actions(launch_description: LaunchDescription, launch_args: LaunchAr
 
     launch_description.add_action(robot_state_publisher)
 
-    start_joint_pub_gui = Node(
+    joint_state_pub_gui = Node(
         package='joint_state_publisher_gui',
         executable='joint_state_publisher_gui',
         name='joint_state_publisher_gui',
         output='screen')
 
-    launch_description.add_action(start_joint_pub_gui)
+    launch_description.add_action(joint_state_pub_gui)
 
     rviz_config_file = PathJoinSubstitution(
         [FindPackageShare('tiago_dual_description'), 'config', 'show.rviz'])

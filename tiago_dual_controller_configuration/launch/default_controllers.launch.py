@@ -20,16 +20,25 @@ from launch import LaunchDescription
 from launch.actions import OpaqueFunction, GroupAction
 from launch.conditions import IfCondition, LaunchConfigurationNotEquals
 from launch.substitutions import LaunchConfiguration, PythonExpression
-from launch_pal.arg_utils import read_launch_argument
 from launch_pal.param_utils import merge_param_files
 from controller_manager.launch_utils import generate_load_controller_launch_description
-from launch_pal.arg_utils import LaunchArgumentsBase
 from launch_pal.include_utils import include_scoped_launch_py_description
+from launch.actions import DeclareLaunchArgument
+from launch_pal.arg_utils import LaunchArgumentsBase, CommonArgs, read_launch_argument
+from launch_pal.robot_arguments import TiagoDualArgs
 
 
 @dataclass(frozen=True)
 class LaunchArguments(LaunchArgumentsBase):
-    pass
+    base_type: DeclareLaunchArgument = TiagoDualArgs.base_type
+    arm_type_right: DeclareLaunchArgument = TiagoDualArgs.arm_type_right
+    arm_type_left: DeclareLaunchArgument = TiagoDualArgs.arm_type_left
+    end_effector_right: DeclareLaunchArgument = TiagoDualArgs.end_effector_right
+    end_effector_left: DeclareLaunchArgument = TiagoDualArgs.end_effector_left
+    ft_sensor_right: DeclareLaunchArgument = TiagoDualArgs.ft_sensor_right
+    ft_sensor_left: DeclareLaunchArgument = TiagoDualArgs.ft_sensor_left
+    use_sim_time: DeclareLaunchArgument = CommonArgs.use_sim_time
+    namespace: DeclareLaunchArgument = CommonArgs.namespace
 
 
 def generate_launch_description():
