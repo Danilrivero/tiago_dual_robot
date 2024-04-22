@@ -19,10 +19,10 @@
   <!-- ARGUMENTS -->
 
   <!-- tiago-arm, no-arm -->
-  <xacro:arg name="arm_left" default="tiago-arm"/>
+  <xacro:arg name="arm_model_left" default="tiago-arm"/>
 
   <!-- tiago-arm, no-arm -->
-  <xacro:arg name="arm_right" default="tiago-arm"/>
+  <xacro:arg name="arm_model_right" default="tiago-arm"/>
 
   <xacro:arg name="wrist_model_left" default="wrist-2010"/>
   <xacro:arg name="wrist_model_right" default="wrist-2010"/>
@@ -58,8 +58,8 @@
 
   <!-- PROPERTIES -->
 
-  <xacro:property name="arm_left" value="$(arg arm_left)"/>
-  <xacro:property name="arm_right" value="$(arg arm_right)"/>
+  <xacro:property name="arm_model_left" value="$(arg arm_model_left)"/>
+  <xacro:property name="arm_model_right" value="$(arg arm_model_right)"/>
   <xacro:property name="wrist_model_left" value="$(arg wrist_model_left)" />
   <xacro:property name="wrist_model_right" value="$(arg wrist_model_right)" />
   <xacro:property name="end_effector_left" value="$(arg end_effector_left)" />
@@ -77,24 +77,24 @@
   <xacro:property name="head_link_name" value="head_2_link"/>
   <xacro:property name="description_calibration_dir" value="${arg description_calibration_dir}"/>
 
-  <xacro:property name="has_arm_left" value="${arm_left != 'no-arm'}"/>
+  <xacro:property name="has_arm_left" value="${arm_model_left != 'no-arm'}"/>
   <xacro:property name="has_ft_sensor_left" value="${ft_sensor_left != 'no-ft-sensor'}"/>
   <xacro:property name="has_end_effector_left" value="${end_effector_left not in ['false', 'False', 'no-ee']}"/>
   <xacro:property name="end_effector_left_link" value="${'wrist_left_ft_tool_link' if has_ft_sensor_left else 'arm_left_tool_link'}"/>
   <xacro:property name="end_effector_left_name" value="${'hand_left' if end_effector_left == 'pal-hey5' else 'gripper_left'}"/>
 
-  <xacro:property name="has_arm_right" value="${arm_right != 'no-arm'}"/>
+  <xacro:property name="has_arm_right" value="${arm_model_right != 'no-arm'}"/>
   <xacro:property name="has_ft_sensor_right" value="${ft_sensor_right != 'no-ft-sensor'}"/>
   <xacro:property name="has_end_effector_right" value="${end_effector_right not in ['false', 'False', 'no-ee']}"/>
   <xacro:property name="end_effector_right_link" value="${'wrist_right_ft_tool_link' if has_ft_sensor_right else 'arm_right_tool_link'}"/>
   <xacro:property name="end_effector_right_name" value="${'hand_right' if end_effector_right == 'pal-hey5' else 'gripper_right'}"/>
 
   <!-- Properties check -->
-  <xacro:if value="${arm_left not in ['no-arm', 'tiago-arm']}">
-    <xacro:wrong_arm_left_type/>
+  <xacro:if value="${arm_model_left not in ['no-arm', 'tiago-arm']}">
+    <xacro:wrong_arm_model_left/>
   </xacro:if>
-  <xacro:if value="${arm_right not in ['no-arm', 'tiago-arm']}">
-    <xacro:wrong_arm_right_type/>
+  <xacro:if value="${arm_model_right not in ['no-arm', 'tiago-arm']}">
+    <xacro:wrong_arm_model_right/>
   </xacro:if>
   <xacro:if value="${wrist_model_left not in ['wrist-2010', 'wrist-2017']}">
     <xacro:wrong_wrist_model/>

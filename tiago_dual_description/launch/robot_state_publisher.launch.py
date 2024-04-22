@@ -90,8 +90,8 @@ def create_robot_description_param(context, *args, **kwargs):
         'robots', 'tiago_dual.urdf.xacro'))
 
     xacro_input_args = {
-        'arm_right': read_launch_argument('arm_type_right', context),
-        'arm_left': read_launch_argument('arm_type_left', context),
+        'arm_model_right': read_launch_argument('arm_type_right', context),
+        'arm_model_left': read_launch_argument('arm_type_left', context),
         'camera_model': read_launch_argument('camera_model', context),
         'end_effector_right': read_launch_argument('end_effector_right', context),
         'end_effector_left': read_launch_argument('end_effector_left', context),
