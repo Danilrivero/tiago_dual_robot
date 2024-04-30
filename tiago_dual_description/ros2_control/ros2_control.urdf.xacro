@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!-- 
-  Copyright (c) 2023 PAL Robotics S.L. All rights reserved.
+  Copyright (c) 2024 PAL Robotics S.L. All rights reserved.
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -14,156 +14,155 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  -->
+
 <robot xmlns:xacro="http://ros.org/wiki/xacro" name="tiago_dual">
 
-  <xacro:macro name="tiago_dual_ros2_control" params="use_sim:=^|false">
+  <!-- INCLUDES -->
+  <xacro:include filename="$(find tiago_description)/urdf/torso/torso.ros2_control.xacro" />
+  <xacro:include filename="$(find tiago_description)/urdf/head/head.ros2_control.xacro" />
+  <xacro:include filename="$(find ${base_type}_description)/urdf/wheels/wheel.ros2_control.xacro" />
+  <xacro:include filename="$(find ${base_type}_description)/urdf/sensors/sensors.ros2_control.xacro" />
+  <xacro:include filename="${description_calibration_dir}/calibration_constants.urdf.xacro" />
 
-    <xacro:arg name="arm_model_left" default="tiago-arm"/>
-    <xacro:arg name="arm_model_right" default="tiago-arm"/>
+  <!-- Arm, FT, EE -->
+  <xacro:if value="${has_arm_right or has_arm_left}">
 
-    <xacro:arg name="end_effector_left" default="pal-gripper"/>
-    <xacro:arg name="end_effector_right" default="pal-gripper"/>
+    <!-- Arm -->
+    <xacro:include filename="$(find tiago_description)/urdf/arm/arm.ros2_control.xacro" />
 
-    <xacro:arg name="ft_sensor_left" default="no-ft-sensor"/>
-    <xacro:arg name="ft_sensor_right" default="no-ft-sensor"/>
+    <!-- Wrist -->
+    <xacro:include filename="$(find tiago_description)/urdf/arm/wrist.ros2_control.xacro" />
 
-    <xacro:arg name="description_calibration_dir" default="$(find tiago_dual_description)/urdf/calibration" />
-
-    <xacro:property name="has_arm_left" value="${arm_model_left != 'no-arm'}" />
-    <xacro:property name="has_arm_right" value="${arm_model_right != 'no-arm'}" />
-
-    <xacro:property name="end_effector_left" value="$(arg end_effector_left)" />
-    <xacro:property name="end_effector_right" value="$(arg end_effector_right)" />
-
-    <xacro:property name="has_ft_sensor_left" value="${ft_sensor_left != 'no-ft-sensor'}" />
-    <xacro:property name="has_ft_sensor_right" value="${ft_sensor_right != 'no-ft-sensor'}" />
-
-    <xacro:include filename="$(find pmb2_description)/urdf/wheels/wheel.ros2_control.xacro" />
-    <xacro:include filename="$(find tiago_description)/urdf/torso/torso.ros2_control.xacro" />
-    <xacro:include filename="$(find tiago_description)/urdf/head/head.ros2_control.xacro" />
-
-    <xacro:if value="${has_arm_left or has_arm_right}">
-      <xacro:include filename="$(find tiago_description)/urdf/arm/arm.ros2_control.xacro" />
-      <xacro:include filename="$(find tiago_description)/urdf/arm/wrist.ros2_control.xacro" />
-
-      <xacro:if value="${end_effector_left == 'pal-gripper' or end_effector_right == 'pal-gripper'}">
-        <xacro:include filename="$(find pal_gripper_description)/urdf/gripper.ros2_control.xacro" />
-      </xacro:if>
-      <xacro:if value="${end_effector_left == 'pal-hey5' or end_effector_right == 'pal-hey5'}">
-        <xacro:include filename="$(find pal_hey5_description)/urdf/pal_hey5.ros2_control.xacro" />
-      </xacro:if>
-      <xacro:if value="${end_effector_left in ['robotiq-2f-85', 'robotiq-2f-140'] or end_effector_right in ['robotiq-2f-85', 'robotiq-2f-140']}">
-        <xacro:include filename="$(find pal_robotiq_description)/urdf/robotiq.ros2_control.xacro" />
-      </xacro:if>
+    <!-- FT sensor -->
+    <xacro:if value="${has_ft_sensor_right or has_ft_sensor_left}">
+      <xacro:include filename="$(find tiago_description)/urdf/sensors/ftsensor.ros2_control.xacro"/>
     </xacro:if>
-    <xacro:include filename="$(find pmb2_description)/urdf/sensors/sensors.ros2_control.xacro"/>
 
+    <!-- End Effector -->
+    <xacro:if value="${end_effector_left == 'pal-gripper' or end_effector_right == 'pal-gripper'}">
+      <xacro:include filename="$(find pal_gripper_description)/urdf/gripper.ros2_control.xacro" />
+    </xacro:if>
+    <xacro:if value="${end_effector_left == 'pal-hey5' or end_effector_right == 'pal-hey5'}">
+      <xacro:include filename="$(find pal_hey5_description)/urdf/pal_hey5.ros2_control.xacro" />
+    </xacro:if>
+    <xacro:if value="${end_effector_left in ['robotiq-2f-85', 'robotiq-2f-140'] or end_effector_right in ['robotiq-2f-85', 'robotiq-2f-140']}">
+      <xacro:include filename="$(find pal_robotiq_description)/urdf/robotiq.ros2_control.xacro" />
+    </xacro:if>
 
-    <!-- calibration offsets -->
-    <xacro:include filename="$(arg description_calibration_dir)/calibration_constants.urdf.xacro" />
+  </xacro:if>
 
+  <!-- MACRO DEFINITION-->
+  <xacro:macro name="tiago_dual_ros2_control">
+
+    <!-- ROS 2 control config-->
     <ros2_control name="ros2_control_tiago_system" type="system">
+
+      <!-- Execution env config -->
       <hardware>
-        <xacro:if value="$(arg use_sim)">
+        <xacro:if value="${use_sim_time}">
           <plugin>gazebo_ros2_control/GazeboSystem</plugin>
         </xacro:if>
-        <xacro:unless value="$(arg use_sim)">
+        <xacro:unless value="${use_sim_time}">
           <plugin>robot_control/RobotControl</plugin>
         </xacro:unless>
-
       </hardware>
 
-      <!-- wheels -->
-      <xacro:ros2_control_wheel side="right" />
-      <xacro:ros2_control_wheel side="left" />
+      <!-- Wheels -->
+      <xacro:if value="${base_type == 'pmb2'}">
+        <xacro:ros2_control_wheel side="right" />
+        <xacro:ros2_control_wheel side="left" />
+      </xacro:if>
+      <xacro:if value="${base_type == 'omni_base'}">
+        <xacro:ros2_control_wheel side="front_right" />
+        <xacro:ros2_control_wheel side="front_left" />
+        <xacro:ros2_control_wheel side="rear_right" />
+        <xacro:ros2_control_wheel side="rear_left" />
+      </xacro:if>
 
       <!-- IMU -->
-      <xacro:if value="$(arg use_sim)">
+      <xacro:if value="${use_sim_time}">
         <xacro:ros2_control_imu name="base_imu_sensor"/>
       </xacro:if>
 
-      <!-- torso -->
+      <!-- Torso -->
       <xacro:ros2_control_torso name="torso_lift" reduction="1.0" />
 
-      <!-- head -->
-      <xacro:ros2_control_head name="head_1" reduction="1.0" offset="${head_1_joint_offset}" />
-      <xacro:ros2_control_head name="head_2" reduction="1.0" offset="${head_2_joint_offset}" />
-
+      <!-- Arm left, Wrist, FT, EE -->
       <xacro:if value="${has_arm_left}">
 
-        <!-- arm -->
+        <!-- Arm -->
         <xacro:ros2_control_arm name="arm_left_1" reduction="1.0" offset="${arm_left_1_joint_offset}" />
         <xacro:ros2_control_arm name="arm_left_2" reduction="1.0" offset="${arm_left_2_joint_offset}" />
         <xacro:ros2_control_arm name="arm_left_3" reduction="1.0" offset="${arm_left_3_joint_offset}" />
         <xacro:ros2_control_arm name="arm_left_4" reduction="1.0" offset="${arm_left_4_joint_offset}" />
 
-        <!-- wrist -->
+        <!-- Wrist -->
         <xacro:ros2_control_wrist_rotational name="arm_left_5" reduction="1.0" offset="${arm_left_5_joint_offset}" />
         <xacro:ros2_control_wrist_differential name="arm_left" number_1="6" number_2="7" act_reduction_1="-1.0" act_reduction_2="1.0" jnt_reduction_1="1.0" jnt_reduction_2="1.0" number_1_offset="${arm_left_6_joint_offset}" number_2_offset="${arm_left_7_joint_offset}" />
 
+        <!-- Force Torque sensor -->
+        <xacro:if value="${has_ft_sensor_left}">
+          <xacro:ros2_control_force_torque_sensor name="wrist_left_ft_sensor"/>
+        </xacro:if>
+
+        <!-- End effector -->
         <xacro:if value="${end_effector_left == 'pal-gripper'}">
-          <!-- pal-gripper -->
           <xacro:ros2_control_gripper name="gripper_left_left_finger" reduction="1.0" />
           <xacro:ros2_control_gripper name="gripper_left_right_finger" reduction="1.0" />
         </xacro:if>
         <xacro:if value="${end_effector_left == 'pal-hey5'}">
-          <!-- pal-hey5 -->
           <xacro:ros2_control_hey5 name="hand_left"/>
         </xacro:if>
         <xacro:if value="${end_effector_left == 'robotiq-2f-85'}">
-          <!-- robotiq-2f-85 -->
           <xacro:ros2_control_robotiq_85_gripper name="gripper_left" reduction="1.0" />
         </xacro:if>
         <xacro:if value="${end_effector_left == 'robotiq-2f-140'}">
-          <!-- robotiq-2f-85 -->
           <xacro:ros2_control_robotiq_140_gripper name="gripper_left" reduction="1.0" />
         </xacro:if>
 
       </xacro:if>
 
+      <!-- Arm right, Wrist, FT, EE -->
       <xacro:if value="${has_arm_right}">
 
-        <!-- arm -->
+        <!-- Arm -->
         <xacro:ros2_control_arm name="arm_right_1" reduction="1.0" offset="${arm_right_1_joint_offset}" />
         <xacro:ros2_control_arm name="arm_right_2" reduction="1.0" offset="${arm_right_2_joint_offset}" />
         <xacro:ros2_control_arm name="arm_right_3" reduction="1.0" offset="${arm_right_3_joint_offset}" />
         <xacro:ros2_control_arm name="arm_right_4" reduction="1.0" offset="${arm_right_4_joint_offset}" />
 
-        <!-- wrist -->
+        <!-- Wrist -->
         <xacro:ros2_control_wrist_rotational name="arm_right_5" reduction="1.0" offset="${arm_right_5_joint_offset}" />
         <xacro:ros2_control_wrist_differential name="arm_right" number_1="6" number_2="7" act_reduction_1="-1.0" act_reduction_2="1.0" jnt_reduction_1="1.0" jnt_reduction_2="-1.0" number_1_offset="${arm_right_6_joint_offset}" number_2_offset="${arm_right_7_joint_offset}" />
 
+        <!-- Force Torque sensor -->
+        <xacro:if value="${has_ft_sensor_right}">
+          <xacro:ros2_control_force_torque_sensor name="wrist_right_ft_sensor"/>
+        </xacro:if>
+
+        <!-- End effector -->
         <xacro:if value="${end_effector_right == 'pal-gripper'}">
-          <!-- pal-gripper -->
           <xacro:ros2_control_gripper name="gripper_right_left_finger" reduction="1.0" />
           <xacro:ros2_control_gripper name="gripper_right_right_finger" reduction="1.0" />
         </xacro:if>
         <xacro:if value="${end_effector_right == 'pal-hey5'}">
-          <!-- pal-hey5 -->
           <xacro:ros2_control_hey5 name="hand_right"/>
         </xacro:if>
         <xacro:if value="${end_effector_right == 'robotiq-2f-85'}">
-          <!-- robotiq-2f-85 -->
           <xacro:ros2_control_robotiq_85_gripper name="gripper_right" reduction="1.0" />
         </xacro:if>
         <xacro:if value="${end_effector_right == 'robotiq-2f-140'}">
-          <!-- robotiq-2f-85 -->
           <xacro:ros2_control_robotiq_140_gripper name="gripper_right" reduction="1.0" />
         </xacro:if>
 
       </xacro:if>
 
-      <!-- Force Torque sensor -->
-      <xacro:if value="${has_ft_sensor_left}">
-        <xacro:include filename="$(find tiago_description)/urdf/sensors/sensors.ros2_control.xacro"/>
-        <xacro:ros2_control_force_torque_sensor name="wrist_left_ft_sensor"/>
-      </xacro:if>
-
-      <xacro:if value="${has_ft_sensor_right}">
-        <xacro:include filename="$(find tiago_description)/urdf/sensors/sensors.ros2_control.xacro"/>
-        <xacro:ros2_control_force_torque_sensor name="wrist_right_ft_sensor"/>
-      </xacro:if>
+      <!-- Head -->
+      <xacro:ros2_control_head name="head_1" reduction="1.0" offset="${head_1_joint_offset}" />
+      <xacro:ros2_control_head name="head_2" reduction="1.0" offset="${head_2_joint_offset}" />
 
     </ros2_control>
+
   </xacro:macro>
+
 </robot>

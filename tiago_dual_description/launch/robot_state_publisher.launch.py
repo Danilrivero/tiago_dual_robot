@@ -95,7 +95,7 @@ def create_robot_description_param(context, *args, **kwargs):
         'wrist_model_left': read_launch_argument('wrist_model_left', context),
         'has_screen': read_launch_argument('has_screen', context),
         'base_type': read_launch_argument('base_type', context),
-        'use_sim': read_launch_argument('use_sim_time', context),
+        'use_sim_time': read_launch_argument('use_sim_time', context),
         'namespace': read_launch_argument('namespace', context),
     }
     robot_description = load_xacro(xacro_file_path, xacro_input_args)
