@@ -55,7 +55,7 @@
   <xacro:macro name="tiago_dual_ros2_control">
 
     <!-- ROS 2 control config-->
-    <ros2_control name="ros2_control_tiago_system" type="system">
+    <ros2_control name="ros2_control_tiago_dual_system" type="system">
 
       <!-- Execution env config -->
       <hardware>
