@@ -23,7 +23,7 @@ from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from launch_param_builder import load_xacro
 from launch_pal.arg_utils import read_launch_argument
-from launch_pal.arg_utils import LaunchArgumentsBase
+from launch_pal.arg_utils import LaunchArgumentsBase, CommonArgs
 from dataclasses import dataclass
 from launch_pal.robot_arguments import TiagoDualArgs
 
@@ -43,15 +43,8 @@ class LaunchArguments(LaunchArgumentsBase):
     camera_model: DeclareLaunchArgument = TiagoDualArgs.camera_model
     laser_model: DeclareLaunchArgument = TiagoDualArgs.laser_model
     has_screen: DeclareLaunchArgument = TiagoDualArgs.has_screen
-
-    use_sim_time: DeclareLaunchArgument = DeclareLaunchArgument(
-        name='use_sim_time',
-        default_value='False',
-        description='Use simulation time')
-    namespace: DeclareLaunchArgument = DeclareLaunchArgument(
-        name='namespace',
-        default_value='',
-        description='Define namespace of the robot. ')
+    use_sim_time: DeclareLaunchArgument = CommonArgs.use_sim_time
+    namespace: DeclareLaunchArgument = CommonArgs.namespace
 
 
 def generate_launch_description():
@@ -75,8 +68,8 @@ def declare_actions(launch_description: LaunchDescription, launch_args: LaunchAr
     rsp = Node(package='robot_state_publisher',
                executable='robot_state_publisher',
                output='both',
-               parameters=[{'robot_description': LaunchConfiguration('robot_description')
-                            }])
+               parameters=[{'use_sim_time': LaunchConfiguration('use_sim_time'),
+                            'robot_description': LaunchConfiguration('robot_description')}])
 
     launch_description.add_action(rsp)
 
@@ -90,8 +83,8 @@ def create_robot_description_param(context, *args, **kwargs):
         'robots', 'tiago_dual.urdf.xacro'))
 
     xacro_input_args = {
-        'arm_right': read_launch_argument('arm_type_right', context),
-        'arm_left': read_launch_argument('arm_type_left', context),
+        'arm_model_right': read_launch_argument('arm_type_right', context),
+        'arm_model_left': read_launch_argument('arm_type_left', context),
         'camera_model': read_launch_argument('camera_model', context),
         'end_effector_right': read_launch_argument('end_effector_right', context),
         'end_effector_left': read_launch_argument('end_effector_left', context),
@@ -102,7 +95,7 @@ def create_robot_description_param(context, *args, **kwargs):
         'wrist_model_left': read_launch_argument('wrist_model_left', context),
         'has_screen': read_launch_argument('has_screen', context),
         'base_type': read_launch_argument('base_type', context),
-        'use_sim': read_launch_argument('use_sim_time', context),
+        'use_sim_time': read_launch_argument('use_sim_time', context),
         'namespace': read_launch_argument('namespace', context),
     }
     robot_description = load_xacro(xacro_file_path, xacro_input_args)

@@ -11,6 +11,7 @@
   <url type="website">https://github.com/pal-robotics/tiago_dual_simulation</url>
 
   <buildtool_depend>ament_cmake_auto</buildtool_depend>
+  <build_depend condition="$PAL_DISTRO >= alum">pal_module_cmake</build_depend>
 
   <exec_depend>tiago_controller_configuration</exec_depend>
   <exec_depend>launch</exec_depend>

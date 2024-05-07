@@ -16,7 +16,7 @@ from dataclasses import dataclass
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch_pal.include_utils import include_scoped_launch_py_description
-from launch_pal.arg_utils import LaunchArgumentsBase
+from launch_pal.arg_utils import LaunchArgumentsBase, CommonArgs
 from launch_pal.robot_arguments import TiagoDualArgs
 
 
@@ -35,15 +35,8 @@ class LaunchArguments(LaunchArgumentsBase):
     camera_model: DeclareLaunchArgument = TiagoDualArgs.camera_model
     laser_model: DeclareLaunchArgument = TiagoDualArgs.laser_model
     has_screen: DeclareLaunchArgument = TiagoDualArgs.has_screen
-
-    use_sim_time: DeclareLaunchArgument = DeclareLaunchArgument(
-        name='use_sim_time',
-        default_value='False',
-        description='Use simulation time')
-    namespace: DeclareLaunchArgument = DeclareLaunchArgument(
-        name='namespace',
-        default_value='',
-        description='Define namespace of the robot. ')
+    use_sim_time: DeclareLaunchArgument = CommonArgs.use_sim_time
+    namespace: DeclareLaunchArgument = CommonArgs.namespace
 
 
 def generate_launch_description():
@@ -63,37 +56,47 @@ def generate_launch_description():
     return ld
 
 
-def declare_actions(launch_description: LaunchDescription, launch_args: LaunchArguments):
-
+def declare_actions(
+    launch_description: LaunchDescription, launch_args: LaunchArguments
+):
     default_controllers = include_scoped_launch_py_description(
         pkg_name='tiago_dual_controller_configuration',
         paths=['launch', 'default_controllers.launch.py'],
-        launch_arguments={"arm_type_right": launch_args.arm_type_right,
-                          "arm_type_left": launch_args.arm_type_left,
-                          "end_effector_right": launch_args.end_effector_right,
-                          "end_effector_left": launch_args.end_effector_left,
-                          "ft_sensor_right": launch_args.ft_sensor_right,
-                          "ft_sensor_left": launch_args.ft_sensor_left,
-                          })
+        launch_arguments={
+            "base_type": launch_args.base_type,
+            "arm_type_right": launch_args.arm_type_right,
+            "arm_type_left": launch_args.arm_type_left,
+            "end_effector_right": launch_args.end_effector_right,
+            "end_effector_left": launch_args.end_effector_left,
+            "ft_sensor_right": launch_args.ft_sensor_right,
+            "ft_sensor_left": launch_args.ft_sensor_left,
+        }
+    )
 
     launch_description.add_action(default_controllers)
 
     play_motion2 = include_scoped_launch_py_description(
         pkg_name='tiago_dual_bringup',
         paths=['launch', 'tiago_dual_play_motion2.launch.py'],
-        launch_arguments={"arm_type_right": launch_args.arm_type_right,
-                          "arm_type_left": launch_args.arm_type_left,
-                          "end_effector_right": launch_args.end_effector_right,
-                          "end_effector_left": launch_args.end_effector_left,
-                          "ft_sensor_right": launch_args.ft_sensor_right,
-                          "ft_sensor_left": launch_args.ft_sensor_left,
-                          "use_sim_time": launch_args.use_sim_time})
+        launch_arguments={
+            "arm_type_right": launch_args.arm_type_right,
+            "arm_type_left": launch_args.arm_type_left,
+            "end_effector_right": launch_args.end_effector_right,
+            "end_effector_left": launch_args.end_effector_left,
+            "ft_sensor_right": launch_args.ft_sensor_right,
+            "ft_sensor_left": launch_args.ft_sensor_left,
+            "use_sim_time": launch_args.use_sim_time
+        }
+    )
 
     launch_description.add_action(play_motion2)
 
     twist_mux = include_scoped_launch_py_description(
         pkg_name='tiago_dual_bringup',
         paths=['launch', 'twist_mux.launch.py'],
+        launch_arguments={
+            "base_type": launch_args.base_type,
+        }
     )
 
     launch_description.add_action(twist_mux)
@@ -101,21 +104,23 @@ def declare_actions(launch_description: LaunchDescription, launch_args: LaunchAr
     robot_state_publisher = include_scoped_launch_py_description(
         pkg_name='tiago_dual_description',
         paths=['launch', 'robot_state_publisher.launch.py'],
-        launch_arguments={"arm_type_right": launch_args.arm_type_right,
-                          "arm_type_left": launch_args.arm_type_left,
-                          "end_effector_right": launch_args.end_effector_right,
-                          "end_effector_left": launch_args.end_effector_left,
-                          "ft_sensor_right": launch_args.ft_sensor_right,
-                          "ft_sensor_left": launch_args.ft_sensor_left,
-                          "wrist_model_right": launch_args.wrist_model_right,
-                          "wrist_model_left": launch_args.wrist_model_left,
-                          "laser_model": launch_args.laser_model,
-                          "camera_model": launch_args.camera_model,
-                          "base_type": launch_args.base_type,
-                          "has_screen": launch_args.has_screen,
-                          "namespace": launch_args.namespace,
-                          "use_sim_time": launch_args.use_sim_time,
-                          })
+        launch_arguments={
+            "arm_type_right": launch_args.arm_type_right,
+            "arm_type_left": launch_args.arm_type_left,
+            "end_effector_right": launch_args.end_effector_right,
+            "end_effector_left": launch_args.end_effector_left,
+            "ft_sensor_right": launch_args.ft_sensor_right,
+            "ft_sensor_left": launch_args.ft_sensor_left,
+            "wrist_model_right": launch_args.wrist_model_right,
+            "wrist_model_left": launch_args.wrist_model_left,
+            "laser_model": launch_args.laser_model,
+            "camera_model": launch_args.camera_model,
+            "base_type": launch_args.base_type,
+            "has_screen": launch_args.has_screen,
+            "namespace": launch_args.namespace,
+            "use_sim_time": launch_args.use_sim_time,
+        }
+    )
 
     launch_description.add_action(robot_state_publisher)
 

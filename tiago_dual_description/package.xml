@@ -16,6 +16,7 @@
 
   <buildtool_depend>ament_cmake_auto</buildtool_depend>
   <buildtool_depend>ament_cmake_python</buildtool_depend>
+  <build_depend condition="$PAL_DISTRO >= alum">pal_module_cmake</build_depend>
 
   <exec_depend>xacro</exec_depend>
   <exec_depend>pmb2_description</exec_depend>
@@ -23,6 +24,7 @@
   <exec_depend>pal_hey5_description</exec_depend>
   <exec_depend>pal_gripper_description</exec_depend>
   <exec_depend>pal_robotiq_description</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
