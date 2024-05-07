@@ -17,7 +17,7 @@ import os
 from dataclasses import dataclass
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import OpaqueFunction, GroupAction
+from launch.actions import OpaqueFunction, GroupAction, SetLaunchConfiguration
 from launch.conditions import IfCondition, LaunchConfigurationNotEquals
 from launch.substitutions import LaunchConfiguration, PythonExpression
 from launch_pal.param_utils import merge_param_files
@@ -56,68 +56,72 @@ def generate_launch_description():
 
 def declare_actions(launch_description: LaunchDescription, launch_args: LaunchArguments):
 
+    # Create the extra configs from the LAs
+    launch_description.add_action(OpaqueFunction(function=create_base_configs))
+
     pkg_share_folder = get_package_share_directory(
         'tiago_dual_controller_configuration')
 
-    # Mobile base controller
-    default_config = os.path.join(
-        pkg_share_folder,
-        'config', 'mobile_base_controller.yaml')
-
-    calibration_config = '/etc/calibration/master_calibration.yaml'
-
-    if os.path.exists(calibration_config):
-        params_file = merge_param_files([default_config, calibration_config])
-    else:
-        params_file = default_config
-
-    mobile_base_controller = GroupAction(
-        [generate_load_controller_launch_description(
-            controller_name='mobile_base_controller',
-            controller_type='diff_drive_controller/DiffDriveController',
-            controller_params_file=params_file)
-         ],
-        forwarding=False)
-
-    launch_description.add_action(mobile_base_controller)
+    # Base controller
+    base_controller = GroupAction(
+        [
+            generate_load_controller_launch_description(
+                controller_name="mobile_base_controller",
+                controller_type=LaunchConfiguration("controller_type"),
+                controller_params_file=LaunchConfiguration("base_params"),
+            )
+        ],
+        condition=IfCondition(
+            PythonExpression(
+                [
+                    "'",
+                    LaunchConfiguration("use_sim_time"),
+                    "' != 'True' or '",
+                    LaunchConfiguration("base_type"),
+                    "' != 'omni_base'",
+                ]
+            )
+        ),
+    )
+    launch_description.add_action(base_controller)
 
     # Joint state broadcaster
     joint_state_broadcaster = GroupAction(
-        [generate_load_controller_launch_description(
-            controller_name='joint_state_broadcaster',
-            controller_type='joint_state_broadcaster/JointStateBroadcaster',
-            controller_params_file=os.path.join(
-                pkg_share_folder,
-                'config', 'joint_state_broadcaster.yaml'))
-         ],
-        forwarding=False)
-
+        [
+            generate_load_controller_launch_description(
+                controller_name="joint_state_broadcaster",
+                controller_type="joint_state_broadcaster/JointStateBroadcaster",
+                controller_params_file=LaunchConfiguration("joint_state_params"),
+            )
+        ],
+    )
     launch_description.add_action(joint_state_broadcaster)
 
     # Torso controller
     torso_controller = GroupAction(
-        [generate_load_controller_launch_description(
-            controller_name='torso_controller',
-            controller_type='joint_trajectory_controller/JointTrajectoryController',
-            controller_params_file=os.path.join(
-                pkg_share_folder,
-                'config', 'torso_controller.yaml'))
-         ],
-        forwarding=False)
-
+        [
+            generate_load_controller_launch_description(
+                controller_name='torso_controller',
+                controller_type='joint_trajectory_controller/JointTrajectoryController',
+                controller_params_file=os.path.join(
+                    pkg_share_folder,
+                    'config', 'torso_controller.yaml')
+            )
+        ],
+    )
     launch_description.add_action(torso_controller)
 
     # Head controller
     head_controller = GroupAction(
-        [generate_load_controller_launch_description(
-            controller_name='head_controller',
-            controller_type='joint_trajectory_controller/JointTrajectoryController',
-            controller_params_file=os.path.join(
-                pkg_share_folder,
-                'config', 'head_controller.yaml'))
-         ],
-        forwarding=False)
-
+        [
+            generate_load_controller_launch_description(
+                controller_name='head_controller',
+                controller_type='joint_trajectory_controller/JointTrajectoryController',
+                controller_params_file=os.path.join(
+                    pkg_share_folder,
+                    'config', 'head_controller.yaml'))
+        ],
+    )
     launch_description.add_action(head_controller)
 
     # Add controller of right arm, end-effector and ft-sensor
@@ -131,11 +135,51 @@ def declare_actions(launch_description: LaunchDescription, launch_args: LaunchAr
     return
 
 
+def create_base_configs(context, *args, **kwargs):
+
+    base_launch_configs = []
+    base_type = read_launch_argument("base_type", context)
+    pkg_share_folder = get_package_share_directory("tiago_controller_configuration")
+
+    # Create base controller params config
+    base_params = os.path.join(
+        pkg_share_folder, "config", f"{base_type}_controller.yaml"
+    )
+
+    calibration_config = "/etc/calibration/master_calibration.yaml"
+    if os.path.exists(calibration_config):
+        base_params = merge_param_files([base_params, calibration_config])
+
+    base_launch_configs.append(SetLaunchConfiguration("base_params", base_params))
+
+    # Create controller type config
+    if base_type == "pmb2":
+        controller_type = "diff_drive_controller/DiffDriveController"
+    else:
+        controller_type = "omni_drive_controller/OmniDriveController"
+
+    base_launch_configs.append(
+        SetLaunchConfiguration("controller_type", controller_type)
+    )
+
+    # Create joint state controller params config
+    joint_state_params = os.path.join(
+        pkg_share_folder, "config", f"{base_type}_joint_state_broadcaster.yaml"
+    )
+
+    base_launch_configs.append(
+        SetLaunchConfiguration("joint_state_params", joint_state_params)
+    )
+
+    return base_launch_configs
+
+
 def configure_side_controllers(context, end_effector_side='right', *args, **kwargs):
 
     pkg_share_folder = get_package_share_directory(
         'tiago_dual_controller_configuration')
 
+    # Arg names
     end_effector_arg_name = concatenate_strings(
         strings=['end_effector', end_effector_side],
         delimiter='_',
@@ -158,38 +202,43 @@ def configure_side_controllers(context, end_effector_side='right', *args, **kwar
         skip_empty=True)
 
     arm_controller = GroupAction(
-        [generate_load_controller_launch_description(
-            controller_name=arm_controller_name,
-            controller_type='joint_trajectory_controller/JointTrajectoryController',
-            controller_params_file=os.path.join(
-                pkg_share_folder,
-                'config', f'{arm_controller_name}.yaml'))
-         ],
-        forwarding=False,
+        [
+            generate_load_controller_launch_description(
+                controller_name=arm_controller_name,
+                controller_type='joint_trajectory_controller/JointTrajectoryController',
+                controller_params_file=os.path.join(
+                    pkg_share_folder,
+                    'config', f'{arm_controller_name}.yaml'))
+        ],
         condition=LaunchConfigurationNotEquals(arm_arg_name, 'no-arm'))
 
-    end_effector_robotiq_list = ['robotiq-2f-85', 'robotiq-2f-140']
-
+    # Setup ee controller
     end_effector = read_launch_argument(end_effector_arg_name, context)
     end_effector_underscore = end_effector.replace('-', '_')
 
-    if (end_effector in end_effector_robotiq_list):
-        pkg_name = 'pal_robotiq_controller_configuration'
-        launch_file = 'robotiq_gripper_controller.launch.py'
+    if "robotiq" in end_effector:
+        ee_pkg_name = "pal_robotiq_controller_configuration"
+        ee_launch_file = "robotiq_gripper_controller.launch.py"
     else:
-        pkg_name = f'{end_effector_underscore}_controller_configuration'
-        launch_file = f'{end_effector_underscore}_controller.launch.py'
+        ee_pkg_name = f"{end_effector_underscore}_controller_configuration"
+        ee_launch_file = f"{end_effector_underscore}_controller.launch.py"
 
     end_effector_controller = include_scoped_launch_py_description(
-        pkg_name=pkg_name,
-        paths=['launch', launch_file],
+        pkg_name=ee_pkg_name,
+        paths=['launch', ee_launch_file],
         launch_arguments={"side": end_effector_side},
         condition=IfCondition(
             PythonExpression(
-                ["'", LaunchConfiguration(arm_arg_name), "' != 'no-arm' and '",
-                 LaunchConfiguration(end_effector_arg_name), "' != 'no-end-effector'"]
+                [
+                    "'",
+                    LaunchConfiguration(arm_arg_name),
+                    "' != 'no-arm' and '",
+                    LaunchConfiguration(ft_sensor_arg_name),
+                    "' != 'no-ft-sensor'",
+                ]
             )
-        ))
+        ),
+    )
 
     # Setup ft-sensor controller
     ft_sensor_controller_name = concatenate_strings(
@@ -198,20 +247,26 @@ def configure_side_controllers(context, end_effector_side='right', *args, **kwar
         skip_empty=True)
 
     ft_sensor_controller = GroupAction(
-        [generate_load_controller_launch_description(
-            controller_name=ft_sensor_controller_name,
-            controller_type='force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster',
-            controller_params_file=os.path.join(
-                pkg_share_folder,
-                'config', f'{ft_sensor_controller_name}.yaml'))
-         ],
-        forwarding=False,
+        [
+            generate_load_controller_launch_description(
+                controller_name=ft_sensor_controller_name,
+                controller_type='force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster',
+                controller_params_file=os.path.join(
+                    pkg_share_folder,
+                    'config', f'{ft_sensor_controller_name}.yaml'))
+        ],
         condition=IfCondition(
             PythonExpression(
-                ["'", LaunchConfiguration(arm_arg_name), "' != 'no-arm' and '",
-                 LaunchConfiguration(ft_sensor_arg_name), "' != 'no-ft-sensor'"]
+                [
+                    "'",
+                    LaunchConfiguration(arm_arg_name),
+                    "' != 'no-arm' and '",
+                    LaunchConfiguration(ft_sensor_arg_name),
+                    "' != 'no-ft-sensor'"
+                ]
             )
-        ))
+        ),
+    )
 
     return [arm_controller, end_effector_controller, ft_sensor_controller]
 
