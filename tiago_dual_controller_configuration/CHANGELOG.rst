@@ -2,6 +2,17 @@
 Changelog for package tiago_dual_controller_configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge branch 'omm/fix/complete_standarization' into 'humble-devel'
+  Final standarization
+  See merge request robots/tiago_dual_robot!98
+* Finished controllers std
+* Name and deps issue
+* Configs updated
+* Launch files standarization
+* Contributors: Oscar, davidterkuile, oscarmartinez
+
 2.0.4 (2024-04-10)
 ------------------
 * Add ros2controlcli dependency

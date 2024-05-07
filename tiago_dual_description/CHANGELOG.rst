@@ -2,6 +2,21 @@
 Changelog for package tiago_dual_description
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge branch 'omm/fix/complete_standarization' into 'humble-devel'
+  Final standarization
+  See merge request robots/tiago_dual_robot!98
+* Name and deps issue
+* Configs updated
+* Launch files standarization
+* Arm naming standarization
+* Merge branch 'omm/fix/urdf_standarization' into 'humble-devel'
+  URDF initial standarization
+  See merge request robots/tiago_dual_robot!97
+* URDF initial standarization
+* Contributors: Oscar, davidterkuile, oscarmartinez
+
 2.0.4 (2024-04-10)
 ------------------
 
