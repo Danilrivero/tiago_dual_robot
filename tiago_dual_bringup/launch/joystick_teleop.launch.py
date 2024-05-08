@@ -25,7 +25,6 @@ from launch_ros.actions import Node
 
 from launch_pal.arg_utils import read_launch_argument
 
-from tiago_dual_description.tiago_dual_launch_utils import get_tiago_dual_hw_suffix
 from launch_pal.arg_utils import LaunchArgumentsBase
 from launch_pal.robot_arguments import TiagoDualArgs
 
@@ -39,11 +38,13 @@ class LaunchArguments(LaunchArgumentsBase):
     end_effector_left: DeclareLaunchArgument = TiagoDualArgs.end_effector_left
     ft_sensor_right: DeclareLaunchArgument = TiagoDualArgs.ft_sensor_right
     ft_sensor_left: DeclareLaunchArgument = TiagoDualArgs.ft_sensor_left
+    base_type: DeclareLaunchArgument = TiagoDualArgs.base_type
 
     cmd_vel: DeclareLaunchArgument = DeclareLaunchArgument(
-        name='cmd_vel',
-        default_value='input_joy/cmd_vel',
-        description='Joystick cmd_vel topic')
+        name="cmd_vel",
+        default_value="input_joy/cmd_vel",
+        description="Joystick cmd_vel topic",
+    )
 
 
 def generate_launch_description():
@@ -59,10 +60,10 @@ def generate_launch_description():
     return ld
 
 
-def declare_actions(launch_description: LaunchDescription, launch_args: LaunchArguments):
-
-    launch_description.add_action(OpaqueFunction(
-        function=create_joy_teleop_filename))
+def declare_actions(
+    launch_description: LaunchDescription, launch_args: LaunchArguments
+):
+    launch_description.add_action(OpaqueFunction(function=create_joy_teleop_filename))
 
     joy_teleop_node = Node(
         package='joy_teleop',
@@ -75,8 +76,8 @@ def declare_actions(launch_description: LaunchDescription, launch_args: LaunchAr
     pkg_dir = get_package_share_directory('tiago_dual_bringup')
 
     joy_node = Node(
-        package='joy',
-        executable='joy_node',
+        package='joy_linux',
+        executable='joy_linux_node',
         name='joystick',
         parameters=[os.path.join(pkg_dir, 'config', 'joy_teleop', 'joy_config.yaml')])
 
@@ -111,20 +112,17 @@ def declare_actions(launch_description: LaunchDescription, launch_args: LaunchAr
 
 
 def create_joy_teleop_filename(context):
-    hw_suffix = get_tiago_dual_hw_suffix(
-        arm_right=read_launch_argument('arm_type_right', context),
-        arm_left=read_launch_argument('arm_type_left', context),
-        end_effector_right=read_launch_argument('end_effector_right', context),
-        end_effector_left=read_launch_argument('end_effector_left', context),
-        ft_sensor_right=read_launch_argument('ft_sensor_right', context),
-        ft_sensor_left=read_launch_argument('ft_sensor_left', context),
-    )
 
-    joy_teleop_file = f"joy_teleop_{hw_suffix}.yaml"
+    base_type = read_launch_argument("base_type", context)
+    pkg_dir = get_package_share_directory("tiago_dual_bringup")
+
+    joy_teleop_file = f"joy_teleop_{base_type}.yaml"
 
     joy_teleop_path = os.path.join(
-        get_package_share_directory('tiago_dual_bringup'), 'config', 'joy_teleop', joy_teleop_file)
+        pkg_dir,
+        "config",
+        "joy_teleop",
+        joy_teleop_file,
+    )
 
-    joy_teleop_config = SetLaunchConfiguration(
-        'teleop_config', joy_teleop_path)
-    return [joy_teleop_config]
+    return [SetLaunchConfiguration("teleop_config", joy_teleop_path)]
