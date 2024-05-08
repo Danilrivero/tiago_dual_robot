@@ -11,6 +11,10 @@ joy_teleop:
           axis: 1
           scale: 1.0
           offset: 0.0
+        linear-y:
+          axis: 0
+          scale: 1.0
+          offset: 0.0
         angular-z:
           axis: 2
           scale: 1.0
@@ -101,18 +105,3 @@ joy_teleop:
       buttons: [1] # right pad, right button
 
 
-#    close_gripper:
-#      type: action
-#      interface_type: teleop_tools_msgs/action/Increment
-#      action_name: /gripper_right_controller/increment
-#      action_goal:
-#        increment_by: [-0.01, -0.01]
-#      buttons: [7] # R2
-#
-#    open_gripper:
-#      type: action
-#      interface_type: teleop_tools_msgs/action/Increment
-#      action_name: /gripper_right_controller/increment
-#      action_goal:
-#        increment_by: [0.01, 0.01]
-#      buttons: [5] # R1
