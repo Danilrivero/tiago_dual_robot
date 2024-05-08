@@ -1,5 +1,6 @@
 default_controllers:
   launch: "tiago_dual_controller_configuration default_controllers.launch.py
+           base_type:=@base_type@
            robot_name:=@robot_type@
            arm_type_right:=@arm_type_right@
            arm_type_left:=@arm_type_left@
