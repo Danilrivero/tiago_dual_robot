@@ -2,6 +2,14 @@
 Changelog for package tiago_dual_controller_configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge branch 'omm/fix/deps_and_joy' into 'humble-devel'
+  New joy config and missing deps added
+  See merge request robots/tiago_dual_robot!99
+* Adding base_type to modules
+* Contributors: davidterkuile, oscarmartinez
+
 2.0.5 (2024-05-07)
 ------------------
 * Merge branch 'omm/fix/complete_standarization' into 'humble-devel'
