@@ -2,8 +2,8 @@
 Changelog for package tiago_dual_description
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.0.9 (2024-05-09)
+------------------
 * Merge branch 'omm/feat/arm_name_std' into 'humble-devel'
   Changed arm_model to arm_type in the URDF
   See merge request robots/tiago_dual_robot!101
