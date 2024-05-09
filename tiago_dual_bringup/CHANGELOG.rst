@@ -2,6 +2,14 @@
 Changelog for package tiago_dual_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge branch 'omm/fix/joy_device' into 'humble-devel'
+  Added proper joystick device setting
+  See merge request robots/tiago_dual_robot!100
+* Added proper joystick device setting
+* Contributors: davidterkuile, oscarmartinez
+
 2.0.7 (2024-05-09)
 ------------------
 
