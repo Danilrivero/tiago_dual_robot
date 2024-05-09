@@ -2,6 +2,11 @@
 Changelog for package tiago_dual_description
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add has_screen to robot state_publisher
+* Contributors: davidterkuile
+
 2.0.6 (2024-05-08)
 ------------------
 * Merge branch 'omm/fix/deps_and_joy' into 'humble-devel'

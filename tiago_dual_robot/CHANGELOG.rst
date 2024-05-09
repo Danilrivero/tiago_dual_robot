@@ -2,6 +2,9 @@
 Changelog for package tiago_dual_robot
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 2.0.6 (2024-05-08)
 ------------------
 
