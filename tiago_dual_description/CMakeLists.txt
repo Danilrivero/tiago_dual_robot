@@ -21,6 +21,16 @@ if(BUILD_TESTING)
 
   foreach(arm_type_left tiago-arm no-arm)
     foreach(arm_type_right tiago-arm no-arm)
+
+        foreach(base_type pmb2 omni_base)
+        add_launch_test(
+          test/test_description.launch.py
+          TARGET "tiago_description_${base_type}_${arm_type_left}_${arm_type_right}"
+          ARGS "arm_type_left:=${arm_type_left}" "arm_type_right:=${arm_type_right}" "base_type:=${base_type}"
+        )
+        endforeach()
+
+
         foreach(end_effector_left pal-gripper pal-hey5 custom no-end-effector)
             foreach(end_effector_right pal-gripper pal-hey5 custom no-end-effector)
                 foreach(ft_sensor_left no-ft-sensor schunk-ft)
