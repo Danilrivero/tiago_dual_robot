@@ -2,6 +2,18 @@
 Changelog for package tiago_dual_description
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge branch 'dtk/fix/description-test-base-type' into 'humble-devel'
+  Add description tests for base types
+  See merge request robots/tiago_dual_robot!103
+* Add description tests for base types
+* Merge branch 'fix/is_public_sim_argument' into 'humble-devel'
+  add missing argument is_public_sim
+  See merge request robots/tiago_dual_robot!102
+* add missing argument is_public_sim
+* Contributors: Aina Irisarri, David ter Kuile, davidterkuile
+
 2.0.9 (2024-05-09)
 ------------------
 * Merge branch 'omm/feat/arm_name_std' into 'humble-devel'
