@@ -2,8 +2,8 @@
 Changelog for package tiago_dual_description
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.0.10 (2024-05-16)
+-------------------
 * Merge branch 'dtk/fix/description-test-base-type' into 'humble-devel'
   Add description tests for base types
   See merge request robots/tiago_dual_robot!103
