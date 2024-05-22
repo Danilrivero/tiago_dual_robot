@@ -44,6 +44,7 @@ class LaunchArguments(LaunchArgumentsBase):
     laser_model: DeclareLaunchArgument = TiagoDualArgs.laser_model
     has_screen: DeclareLaunchArgument = TiagoDualArgs.has_screen
     use_sim_time: DeclareLaunchArgument = CommonArgs.use_sim_time
+    is_public_sim: DeclareLaunchArgument = CommonArgs.is_public_sim
     namespace: DeclareLaunchArgument = CommonArgs.namespace
 
 
@@ -96,6 +97,7 @@ def create_robot_description_param(context, *args, **kwargs):
         'has_screen': read_launch_argument('has_screen', context),
         'base_type': read_launch_argument('base_type', context),
         'use_sim_time': read_launch_argument('use_sim_time', context),
+        'is_public_sim': read_launch_argument('is_public_sim', context),
         'namespace': read_launch_argument('namespace', context),
     }
     robot_description = load_xacro(xacro_file_path, xacro_input_args)

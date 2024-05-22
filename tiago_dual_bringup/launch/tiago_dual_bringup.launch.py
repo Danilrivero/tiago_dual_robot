@@ -36,14 +36,11 @@ class LaunchArguments(LaunchArgumentsBase):
     laser_model: DeclareLaunchArgument = TiagoDualArgs.laser_model
     has_screen: DeclareLaunchArgument = TiagoDualArgs.has_screen
     use_sim_time: DeclareLaunchArgument = CommonArgs.use_sim_time
+    is_public_sim: DeclareLaunchArgument = CommonArgs.is_public_sim
     namespace: DeclareLaunchArgument = CommonArgs.namespace
 
 
 def generate_launch_description():
-
-    # @TODO: robot pose publisher
-    # @TODO: tf lookup
-    # @TODO: dynamic footprint
 
     # Create the launch description and populate
     ld = LaunchDescription()
@@ -119,6 +116,7 @@ def declare_actions(
             "has_screen": launch_args.has_screen,
             "namespace": launch_args.namespace,
             "use_sim_time": launch_args.use_sim_time,
+            "is_public_sim": launch_args.is_public_sim
         }
     )
 
