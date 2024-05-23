@@ -232,9 +232,7 @@ def configure_side_controllers(context, end_effector_side='right', *args, **kwar
                 [
                     "'",
                     LaunchConfiguration(arm_arg_name),
-                    "' != 'no-arm' and '",
-                    LaunchConfiguration(ft_sensor_arg_name),
-                    "' != 'no-ft-sensor'",
+                    "' != 'no-arm' "
                 ]
             )
         ),
