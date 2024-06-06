@@ -28,8 +28,7 @@ extension = os.path.splitext(no_em_extension_path)[1]
 
 end_effectors = ["pal-hey5", "pal-gripper",
                  "robotiq-2f-85", "robotiq-2f-140", "robotiq-epick", "custom", "no-ee"]
-ft_sensors = ["schunk-ft", "no-ft-sensor"]
-arm_config = [True, False]  # For validation of pmb2 only
+arm_config = [True, False]
 
 for left_end_effector in end_effectors:
     for right_end_effector in end_effectors:
