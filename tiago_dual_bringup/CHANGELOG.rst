@@ -2,8 +2,8 @@
 Changelog for package tiago_dual_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.0.11 (2024-06-10)
+-------------------
 * Merge branch 'feat/motions' into 'humble-devel'
   migrate general motions
   See merge request robots/tiago_dual_robot!106
