@@ -2,6 +2,14 @@
 Changelog for package tiago_dual_description
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge branch 'dtk/fix/add-missing-public-sim' into 'humble-devel'
+  Add public_sim arg to launch files
+  See merge request robots/tiago_dual_robot!104
+* Add public_sim arg to launch files
+* Contributors: David ter Kuile, davidterkuile
+
 2.0.10 (2024-05-16)
 -------------------
 * Merge branch 'dtk/fix/description-test-base-type' into 'humble-devel'

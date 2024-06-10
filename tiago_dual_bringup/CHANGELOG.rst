@@ -2,6 +2,23 @@
 Changelog for package tiago_dual_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge branch 'feat/motions' into 'humble-devel'
+  migrate general motions
+  See merge request robots/tiago_dual_robot!106
+* remove ft_sensor of the regen file
+* fix general files
+* rename motions files && change launch file to not check ft-sensor
+* rename motion_planner files
+* add arm left general motions
+* migrate general motions
+* Merge branch 'dtk/fix/add-missing-public-sim' into 'humble-devel'
+  Add public_sim arg to launch files
+  See merge request robots/tiago_dual_robot!104
+* Add public_sim arg to launch files
+* Contributors: Aina, David ter Kuile, davidterkuile
+
 2.0.10 (2024-05-16)
 -------------------
 

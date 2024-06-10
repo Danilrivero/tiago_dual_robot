@@ -2,6 +2,14 @@
 Changelog for package tiago_dual_controller_configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge branch 'fix/end_effector_controller' into 'humble-devel'
+  fix end_effector_controller whne no-ft-sensor
+  See merge request robots/tiago_dual_robot!105
+* fix end_effector_controller whne no-ft-sensor
+* Contributors: Aina, davidterkuile
+
 2.0.10 (2024-05-16)
 -------------------
 
