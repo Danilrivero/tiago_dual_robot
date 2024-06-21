@@ -22,8 +22,9 @@ from launch_pal.include_utils import include_scoped_launch_py_description
 from launch_pal.arg_utils import read_launch_argument
 from tiago_dual_description.tiago_dual_launch_utils import get_tiago_dual_hw_suffix
 from launch_pal.param_utils import merge_param_files
-from launch_pal.arg_utils import LaunchArgumentsBase, CommonArgs
-from launch_pal.robot_arguments import TiagoDualArgs
+from launch_pal.arg_utils import LaunchArgumentsBase
+from launch_pal.robot_arguments import CommonArgs
+from tiago_dual_description.launch_arguments import TiagoDualArgs
 
 
 @dataclass(frozen=True)

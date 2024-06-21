@@ -26,7 +26,7 @@ from launch_ros.actions import Node
 from launch_pal.arg_utils import read_launch_argument
 
 from launch_pal.arg_utils import LaunchArgumentsBase
-from launch_pal.robot_arguments import TiagoDualArgs
+from tiago_dual_description.launch_arguments import TiagoDualArgs
 
 
 @dataclass(frozen=True)

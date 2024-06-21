@@ -24,8 +24,9 @@ from launch_pal.param_utils import merge_param_files
 from controller_manager.launch_utils import generate_load_controller_launch_description
 from launch_pal.include_utils import include_scoped_launch_py_description
 from launch.actions import DeclareLaunchArgument
-from launch_pal.arg_utils import LaunchArgumentsBase, CommonArgs, read_launch_argument
-from launch_pal.robot_arguments import TiagoDualArgs
+from launch_pal.arg_utils import LaunchArgumentsBase, read_launch_argument
+from launch_pal.robot_arguments import CommonArgs
+from tiago_dual_description.launch_arguments import TiagoDualArgs
 
 
 @dataclass(frozen=True)
