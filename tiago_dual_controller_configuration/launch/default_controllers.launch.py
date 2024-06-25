@@ -91,7 +91,10 @@ def declare_actions(launch_description: LaunchDescription, launch_args: LaunchAr
             generate_load_controller_launch_description(
                 controller_name="joint_state_broadcaster",
                 controller_type="joint_state_broadcaster/JointStateBroadcaster",
-                controller_params_file=LaunchConfiguration("joint_state_params"),
+                controller_params_file=os.path.join(
+                    pkg_share_folder, "config", "joint_state_broadcaster.yaml"
+                ),
+
             )
         ],
     )
@@ -173,15 +176,6 @@ def create_base_configs(context, *args, **kwargs):
 
     base_launch_configs.append(
         SetLaunchConfiguration("controller_type", controller_type)
-    )
-
-    # Create joint state controller params config
-    joint_state_params = os.path.join(
-        pkg_share_folder, "config", f"{base_type}_joint_state_broadcaster.yaml"
-    )
-
-    base_launch_configs.append(
-        SetLaunchConfiguration("joint_state_params", joint_state_params)
     )
 
     return base_launch_configs
