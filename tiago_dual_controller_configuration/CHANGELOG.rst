@@ -2,8 +2,8 @@
 Changelog for package tiago_dual_controller_configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.0.12 (2024-06-25)
+-------------------
 * Merge branch 'dtk/fix/urdf' into 'humble-devel'
   Dtk/fix/urdf
   See merge request robots/tiago_dual_robot!109
