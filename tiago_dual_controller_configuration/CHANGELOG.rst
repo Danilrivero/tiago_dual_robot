@@ -2,6 +2,19 @@
 Changelog for package tiago_dual_controller_configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge branch 'dtk/fix/urdf' into 'humble-devel'
+  Dtk/fix/urdf
+  See merge request robots/tiago_dual_robot!109
+* Load correct joint state params
+* Add imu gazebo and imo sensor broadcaster
+* Merge branch 'fix/remove_extra_joints' into 'humble-devel'
+  Remove casters and suspension from joint_state_broadcaster
+  See merge request robots/tiago_dual_robot!110
+* Remove casters and suspension from joint_state_broadcaster
+* Contributors: David ter Kuile, Jordan Palacios, Noel Jimenez, davidterkuile
+
 2.0.11 (2024-06-10)
 -------------------
 * Merge branch 'fix/end_effector_controller' into 'humble-devel'

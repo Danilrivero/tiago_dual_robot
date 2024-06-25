@@ -2,6 +2,16 @@
 Changelog for package tiago_dual_description
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge branch 'dtk/fix/urdf' into 'humble-devel'
+  Dtk/fix/urdf
+  See merge request robots/tiago_dual_robot!109
+* Add imu gazebo and imo sensor broadcaster
+* Move gazebo ros2 control
+* Update urdf of base
+* Contributors: David ter Kuile, davidterkuile
+
 2.0.11 (2024-06-10)
 -------------------
 * Merge branch 'dtk/fix/add-missing-public-sim' into 'humble-devel'
