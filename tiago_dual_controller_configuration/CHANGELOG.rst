@@ -2,6 +2,14 @@
 Changelog for package tiago_dual_controller_configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge branch 'dtk/move-robot-args' into 'humble-devel'
+  Change import for launch args
+  See merge request robots/tiago_dual_robot!111
+* Change import for launch args
+* Contributors: David ter Kuile, davidterkuile
+
 2.0.12 (2024-06-25)
 -------------------
 * Merge branch 'dtk/fix/urdf' into 'humble-devel'
