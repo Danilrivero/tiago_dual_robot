@@ -23,9 +23,10 @@ from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from launch_param_builder import load_xacro
 from launch_pal.arg_utils import read_launch_argument
-from launch_pal.arg_utils import LaunchArgumentsBase, CommonArgs
+from launch_pal.arg_utils import LaunchArgumentsBase
+from launch_pal.robot_arguments import CommonArgs
 from dataclasses import dataclass
-from launch_pal.robot_arguments import TiagoDualArgs
+from tiago_dual_description.launch_arguments import TiagoDualArgs
 
 
 @dataclass(frozen=True)
