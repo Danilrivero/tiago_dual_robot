@@ -71,18 +71,7 @@ def declare_actions(launch_description: LaunchDescription, launch_args: LaunchAr
                 controller_type=LaunchConfiguration("controller_type"),
                 controller_params_file=LaunchConfiguration("base_params"),
             )
-        ],
-        condition=IfCondition(
-            PythonExpression(
-                [
-                    "'",
-                    LaunchConfiguration("use_sim_time"),
-                    "' != 'True' or '",
-                    LaunchConfiguration("base_type"),
-                    "' != 'omni_base'",
-                ]
-            )
-        ),
+        ]
     )
     launch_description.add_action(base_controller)
 
@@ -156,18 +145,24 @@ def create_base_configs(context, *args, **kwargs):
 
     base_launch_configs = []
     base_type = read_launch_argument("base_type", context)
-    pkg_share_folder = get_package_share_directory("tiago_controller_configuration")
-
-    # Create base controller params config
-    base_params = os.path.join(
-        pkg_share_folder, "config", f"{base_type}_controller.yaml"
-    )
+    base_share_pkg_folder = get_package_share_directory(base_type + "_controller_configuration")
+    base_params = base_share_pkg_folder + "/config/mobile_base_controller.yaml"
 
     calibration_config = "/etc/calibration/master_calibration.yaml"
     if os.path.exists(calibration_config):
         base_params = merge_param_files([base_params, calibration_config])
 
     base_launch_configs.append(SetLaunchConfiguration("base_params", base_params))
+
+    # Create controller type config
+    if base_type == "pmb2":
+        controller_type = "diff_drive_controller/DiffDriveController"
+    else:
+        controller_type = "omni_drive_controller/OmniDriveController"
+
+    base_launch_configs.append(
+        SetLaunchConfiguration("controller_type", controller_type)
+    )
 
     # Create controller type config
     if base_type == "pmb2":
