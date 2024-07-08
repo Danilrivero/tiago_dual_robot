@@ -2,8 +2,8 @@
 Changelog for package tiago_dual_description
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.0.14 (2024-07-08)
+-------------------
 * change module name into 20\_*
 * Contributors: Aina
 

@@ -2,8 +2,8 @@
 Changelog for package tiago_dual_controller_configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.0.14 (2024-07-08)
+-------------------
 * change module name into 20\_*
 * change the bases config file for their packages config files
 * Contributors: Aina
