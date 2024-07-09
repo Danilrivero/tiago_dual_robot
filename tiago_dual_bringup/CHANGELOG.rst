@@ -2,6 +2,11 @@
 Changelog for package tiago_dual_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add warning for pal_module_cmake not found
+* Contributors: Noel Jimenez
+
 2.0.14 (2024-07-08)
 -------------------
 
